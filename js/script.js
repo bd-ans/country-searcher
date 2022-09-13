@@ -1,46 +1,45 @@
 const countryList = $('.js-country-list');
-const moviesCardTemplate = $('#template-element').content;
+const elCountryCardTemplate = $('#template-element').content;
 
-const searchInput = $('.js-search-input');
-const searchSelect = $('.js-search-select');
-const searchBtn = $('.js-search-btn');
+const elSearchInput = $('.js-search-input');
+const elSearchBtn = $('.js-search-btn');
 const elFailTxt = $('.js-fail-txt');
 
 let arr = [];
 
 // render function
 function mainFunc() {
-    // creating elements for movies list
-    let createMovieElement = function (arr) {
-        let movieElement = moviesCardTemplate.cloneNode(true);
-        movieElement.querySelector('.js-movie-img').src = arr.flags.png;
-        movieElement.querySelector('.js-movie-img').alt = arr.name.official;
-        movieElement.querySelector('.js-modal-movie-img').src = arr.flags.png;
-        movieElement.querySelector('.js-modal-movie-img').alt = arr.name.official;
-        movieElement.querySelector('.js-country-title').textContent = arr.name.common;
-        movieElement.querySelector('.js-modal-title').textContent = arr.name.official;
-        movieElement.querySelector('.js-country-capital').textContent = arr.capital;
-        movieElement.querySelector('.js-country-population').textContent = arr.population;
-        movieElement.querySelector('.js-country-landlocked').textContent = arr.landlocked;
-        movieElement.querySelector('.js-country-region').textContent = arr.region;
-        movieElement.querySelector('.js-country-map-link').href = arr.maps.googleMaps;
-        movieElement.querySelector('.js-country-independent').textContent = arr.independent;
-        movieElement.querySelector('.js-country-status').textContent = arr.status;
+    // creating elements for country list
+    let createCountryElement = function (arr) {
+        let countryElement = elCountryCardTemplate.cloneNode(true);
+        countryElement.querySelector('.js-country-img').src = arr.flags.png;
+        countryElement.querySelector('.js-country-img').alt = arr.name.official;
+        countryElement.querySelector('.js-modal-country-img').src = arr.flags.png;
+        countryElement.querySelector('.js-modal-country-img').alt = arr.name.official;
+        countryElement.querySelector('.js-country-title').textContent = arr.name.common;
+        countryElement.querySelector('.js-modal-title').textContent = arr.name.official;
+        countryElement.querySelector('.js-country-capital').textContent = arr.capital;
+        countryElement.querySelector('.js-country-population').textContent = arr.population;
+        countryElement.querySelector('.js-country-landlocked').textContent = arr.landlocked;
+        countryElement.querySelector('.js-country-region').textContent = arr.region;
+        countryElement.querySelector('.js-country-map-link').href = arr.maps.googleMaps;
+        countryElement.querySelector('.js-country-independent').textContent = arr.independent;
+        countryElement.querySelector('.js-country-status').textContent = arr.status;
         if (arr.borders === undefined) {
-            movieElement.querySelector('.js-country-borders').textContent = 'No borders';
+            countryElement.querySelector('.js-country-borders').textContent = 'No borders';
         } else {
-            movieElement.querySelector('.js-country-borders').textContent = arr.borders.join(', ');
+            countryElement.querySelector('.js-country-borders').textContent = arr.borders.join(', ');
         }
-        movieElement.querySelector('.js-country-car-sign').textContent = arr.car.signs;
-        movieElement.querySelector('.js-country-car-rule').textContent = arr.car.side;
-        movieElement.querySelector('.js-country-timezones').textContent = arr.timezones.join(', ');
-        movieElement.querySelector('.js-country-start-week').textContent = arr.startOfWeek;
+        countryElement.querySelector('.js-country-car-sign').textContent = arr.car.signs;
+        countryElement.querySelector('.js-country-car-rule').textContent = arr.car.side;
+        countryElement.querySelector('.js-country-timezones').textContent = arr.timezones.join(', ');
+        countryElement.querySelector('.js-country-start-week').textContent = arr.startOfWeek;
 
-        movieElement.querySelector('.js-modal').id = `exampleModal${arr.area}`;
-        movieElement.querySelector('.js-modal-title').id = `exampleModal${arr.area}`;
-        movieElement.querySelector('.js-modal-btn').setAttribute('data-bs-target', `#exampleModal${arr.area}`);
+        countryElement.querySelector('.js-modal').id = `exampleModal${arr.area}`;
+        countryElement.querySelector('.js-modal-title').id = `exampleModal${arr.area}`;
+        countryElement.querySelector('.js-modal-btn').setAttribute('data-bs-target', `#exampleModal${arr.area}`);
     
-        return movieElement;
+        return countryElement;
     }
 
     // render function
@@ -48,8 +47,8 @@ function mainFunc() {
         countryList.innerHTML = null;
         let fragment = document.createDocumentFragment();
     
-        arr.forEach(movie => {
-            fragment.appendChild(createMovieElement(movie));
+        arr.forEach(country => {
+            fragment.appendChild(createCountryElement(country));
         });
         
         countryList.appendChild(fragment);
@@ -76,7 +75,7 @@ function searchMovies(event) {
             elFailTxt.classList.remove('d-none');
             return;
         } else {
-            searchInput.blur();
+            elSearchInput.blur();
             elFailTxt.classList.add('d-none');
             arr = data;
             mainFunc();
@@ -84,22 +83,22 @@ function searchMovies(event) {
     })
 }
 // Search input enter
-searchInput.addEventListener('keyup', function (event) {
+elSearchInput.addEventListener('keyup', function (event) {
     if (event.key === 'Enter') {
-        searchBtn.click();
+        elSearchBtn.click();
     }
 });
 
 // Search btn click
-searchBtn.onclick = function () {
-    let value = searchInput.value.toLowerCase().trim();
+elSearchBtn.onclick = function () {
+    let value = elSearchInput.value.toLowerCase().trim();
     if (value === '') {
-        searchInput.value = null;
+        elSearchInput.value = null;
         return;
     } else {
     countryList.innerHTML = null;
-    searchInput.value = null;
-    // searchInput.blur();
+    elSearchInput.value = null;
+    // elSearchInput.blur();
 
     searchMovies(value)
     }
