@@ -76,6 +76,7 @@ function searchMovies(event) {
             elFailTxt.classList.remove('d-none');
             return;
         } else {
+            searchInput.blur();
             elFailTxt.classList.add('d-none');
             arr = data;
             mainFunc();
@@ -98,7 +99,7 @@ searchBtn.onclick = function () {
     } else {
     countryList.innerHTML = null;
     searchInput.value = null;
-    searchInput.blur();
+    // searchInput.blur();
 
     searchMovies(value)
     }
