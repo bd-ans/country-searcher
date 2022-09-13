@@ -1,4 +1,4 @@
-const moviesList = $('.js-movies-list');
+const countryList = $('.js-country-list');
 const moviesCardTemplate = $('#template-element').content;
 
 const searchInput = $('.js-search-input');
@@ -26,7 +26,11 @@ function mainFunc() {
         movieElement.querySelector('.js-country-map-link').href = arr.maps.googleMaps;
         movieElement.querySelector('.js-country-independent').textContent = arr.independent;
         movieElement.querySelector('.js-country-status').textContent = arr.status;
-        movieElement.querySelector('.js-country-borders').textContent = arr.borders;
+        if (arr.borders === undefined) {
+            movieElement.querySelector('.js-country-borders').textContent = 'No borders';
+        } else {
+            movieElement.querySelector('.js-country-borders').textContent = arr.borders.join(', ');
+        }
         movieElement.querySelector('.js-country-car-sign').textContent = arr.car.signs;
         movieElement.querySelector('.js-country-car-rule').textContent = arr.car.side;
         movieElement.querySelector('.js-country-timezones').textContent = arr.timezones.join(', ');
@@ -40,18 +44,18 @@ function mainFunc() {
     }
 
     // render function
-    let renderMovies = function (arr) {
-        moviesList.innerHTML = null;
+    let renderCountries = function (arr) {
+        countryList.innerHTML = null;
         let fragment = document.createDocumentFragment();
     
         arr.forEach(movie => {
             fragment.appendChild(createMovieElement(movie));
         });
         
-        moviesList.appendChild(fragment);
+        countryList.appendChild(fragment);
     }
     
-    renderMovies(arr);
+    renderCountries(arr);
 }
 
 // api request
@@ -59,13 +63,13 @@ function searchMovies(event) {
     let urlApi = `https://restcountries.com/v3.1/name/${event}`;
 
     setTimeout(() => {
-        moviesList.innerHTML = null;
+        countryList.innerHTML = null;
         mainFunc();
     }, 1000);
     
     fetch(urlApi)
     .then(response => response.json())
-    .catch(err => alert(err))
+    .catch(err => console.log(err))
     .then(data => {
         if (data.status === 404) {
             arr = [];
@@ -78,25 +82,24 @@ function searchMovies(event) {
         }
     })
 }
-
+// Search input enter
 searchInput.addEventListener('keyup', function (event) {
     if (event.key === 'Enter') {
         searchBtn.click();
     }
 });
 
-// Search input
+// Search btn click
 searchBtn.onclick = function () {
     let value = searchInput.value.toLowerCase().trim();
-    moviesList.innerHTML = null;
-    // searchInput.value = null;
-    // searchInput.unfocus();
+    if (value === '') {
+        searchInput.value = null;
+        return;
+    } else {
+    countryList.innerHTML = null;
+    searchInput.value = null;
+    searchInput.blur();
 
-    
     searchMovies(value)
+    }
 }
-// Search input end
-
-const request = fetch('https://restcountries.com/v3.1/name/china').
-  then(res => res.json()).
-  then(data => console.log(data));
